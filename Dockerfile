@@ -1,7 +1,18 @@
-FROM node:12.2.0-alpine
-WORKDIR app
-COPY . .
+# Use Node.js base image
+FROM node:20
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy package.json and install dependencies
+COPY package*.json ./
 RUN npm install
-RUN npm run test
-EXPOSE 8000
-CMD ["node","app.js"]
+
+# Copy application source code
+COPY . .
+
+# Expose port 3000
+EXPOSE 3000
+
+# Run the app
+CMD ["npm", "start"]
