@@ -1,6 +1,8 @@
 pipeline {
     agent any
-    
+    environment {
+        DOCKER_PASSWORD = credentials('Rao.Adnan1994$') // Jenkins credentials ID
+    }
     stages {
         stage('Checkout Code') {
             steps {
@@ -23,11 +25,11 @@ pipeline {
             }
         }
         
-        stage('Build Docker Image') {
+        stage('Login to Docker Hub') {
             steps {
                 script {
-                    // Build the Docker image for the Node.js app
-                    docker.build('nodejs-app')
+                    // Login to Docker Hub
+                    sh 'echo $DOCKER_PASSWORD | docker login -u raoadi20 --password-stdin'
                 }
             }
         }
@@ -40,6 +42,10 @@ pipeline {
                     sh 'docker stop nodejs-staging || true && docker rm nodejs-staging || true'
                     // Run the Docker container in detached mode
                     sh 'docker run -d --name nodejs-staging -p 3000:3000 nodejs-app'
+                    
+                    // Push the Docker image to Docker Hub
+                    sh 'docker tag nodejs-app raoadi20/nodejs-app' // Tagging the image
+                    sh 'docker push raoadi20/nodejs-app'           // Pushing the image to Docker Hub
                 }
             }
         }
