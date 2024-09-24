@@ -47,7 +47,7 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 // Deploy to production server
-                sshagent(['your-ssh-key-id']) {
+                sshagent(['prod-ssh-key']) {
                     sh """
                     ssh prosecops@172.16.5.111 'docker stop nodejs-prod || true && docker rm nodejs-prod || true'
                     ssh prosecops@172.16.5.111 'docker pull nodejs-app'
