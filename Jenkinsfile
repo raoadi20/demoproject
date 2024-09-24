@@ -49,6 +49,7 @@ pipeline {
                 // Deploy to production server
                 sshagent(['prod-ssh-key']) {
                     sh """
+                    mkdir -p ~/.ssh
                     ssh-keyscan -H 172.16.5.111 >> ~/.ssh/known_hosts
                     ssh prosecops@172.16.5.111 'docker stop nodejs-prod || true && docker rm nodejs-prod || true'
                     ssh prosecops@172.16.5.111 'docker pull nodejs-app'
